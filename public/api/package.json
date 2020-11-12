@@ -1,0 +1,85 @@
+{
+  "res": "true",
+  "data": [
+    {
+    "id": "1",
+    "userName": "admin",
+    "pwd": "123",
+    "role": "1",
+      "mailbox": "1234@qq.com",
+      "tel": "18265313393",
+      "name": "管理员"
+  },
+    { "id": "2",
+      "userName": "wer",
+      "pwd": "123",
+      "role": "2",
+      "mailbox": "12345@qq.com",
+      "tel": "18265313383",
+      "name": "教师"
+    },
+      {
+        "id": "3",
+        "userName": "ert",
+        "pwd": "123",
+        "role": "2",
+        "mailbox": "123456@qq.com",
+        "tel": "18265313373",
+        "name": "教师"
+      },
+    {
+      "id": "4",
+      "userName": "yui",
+      "pwd": "123",
+      "role": "3",
+      "mailbox": "1234567@qq.com",
+      "tel": "18265313363",
+      "name": "学生"
+    },
+    {
+      "id": "5",
+      "userName": "pop",
+      "pwd": "123",
+      "role": "3",
+      "mailbox": "12345678@qq.com",
+      "tel": "18265313353",
+      "name": "学生"
+    },
+    {
+      "id": "6",
+      "userName": "uio",
+      "pwd": "123",
+      "role": "3",
+      "mailbox": "123456789@qq.com",
+      "tel": "18265313343",
+      "name": "学生"
+    },
+    {
+      "id": "7",
+      "userName": "uzi",
+      "pwd": "123",
+      "role": "3",
+      "mailbox": "1234567890@qq.com",
+      "tel": "18265313333",
+      "name": "学生"
+    },
+    {
+      "id": "8",
+      "userName": "uuu",
+      "pwd": "123",
+      "role": "3",
+      "mailbox": "12345678901@qq.com",
+      "tel": "18265313323",
+      "name": "学生"
+    },
+    {
+      "id": "9",
+      "userName": "lki",
+      "pwd": "123",
+      "role": "3",
+      "mailbox": "123456789012@qq.com",
+      "tel": "18265313313",
+      "name": "学生"
+    }
+      ]
+}

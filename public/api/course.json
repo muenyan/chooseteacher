@@ -1,0 +1,140 @@
+{
+  "res": "true",
+  "data": [
+    {
+      "id": "1",
+      "courseNo": "course_0001",
+      "courseName": "JAVA se程序设计",
+      "score": "3",
+      "courseHour": "32",
+      "term": "2"
+
+    },
+    {
+      "id": "2",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "3",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "4",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "5",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "6",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "7",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "8",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "9",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "10",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "11",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "12",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },{
+      "id": "13",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "14",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    },
+    {
+      "id": "15",
+      "courseNo": "course_0001",
+      "courseName": "web编程基础",
+      "score": "1",
+      "courseHour": "32",
+      "term": "4"
+
+    }
+
+  ]
+}

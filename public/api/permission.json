@@ -1,0 +1,75 @@
+{
+  "res": "true",
+  "data": {
+    "1": [
+      {
+        "id": "1",
+        "title": "系统管理",
+        "name": "base",
+        "icon": "el-icon-setting",
+        "children": [
+          {"id": "15", "title": "教师管理", "name": "teacher","icons": "el-icon-star-off"},
+          {"id": "14", "title": "学生管理", "name": "student","icons": "el-icon-question"},
+          {"id": "18", "title": "角色管理", "name": "role","icons": "el-icon-s-goods"},
+          {"id": "19", "title": "字典管理", "name": "dict","icons": "el-icon-upload"},
+          {"id": "11", "title": "网站用户", "name": "user","icons": "el-icon-close"}
+
+        ]
+      },
+      {
+        "id": "30",
+        "title": "个人中心",
+        "icon": "el-icon-user",
+        "name": "personal",
+        "children": [
+          {"id": "15", "title": "个人资料", "name": "info"},
+          {"id": "14", "title": "密码修改", "name": "pwd"}
+        ]
+      }
+    ],
+    "2": [
+      {
+      "id": "3",
+      "title": "选择学生",
+      "name": "choosestudent"
+    },
+      {
+        "id": "6",
+        "title": "我的学生",
+        "name": "mystudent"
+      },
+      {
+        "id": "30",
+        "title": "个人中心",
+        "name": "personal",
+        "children": [
+          {"id": "15", "title": "个人资料", "name": "info"},
+          {"id": "14", "title": "密码修改", "name": "pwd"}
+        ]
+      }
+    ],
+    "3": [
+      {
+        "id": "4",
+        "title": "选择导师",
+        "name": "chooseteacher"
+      },
+      {
+        "id": "5",
+        "title": "我的选择",
+        "name": "mychoose"
+      },
+      {
+        "id": "30",
+        "title": "个人中心",
+        "name": "personal",
+        "children": [
+          {"id": "15", "title": "个人资料", "name": "info"},
+          {"id": "14", "title": "密码修改", "name": "pwd"}
+        ]
+      }
+    ]
+
+  }
+
+}

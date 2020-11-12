@@ -1,0 +1,89 @@
+{
+  "res": "true",
+  "data": [
+    {
+      "id": "1",
+      "courseNo": "1号教学-A-502",
+      "courseName": "计算机教室",
+      "score": "1",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1A502"
+    },
+    {
+      "id": "2",
+      "courseNo": "1号教学-B-504",
+      "courseName": "计算机教室",
+      "score": "1",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1B504"
+    },
+    {
+      "id": "3",
+      "courseNo": "2号教学-B-502",
+      "courseName": "计算机教室",
+      "score": "2",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "2B502"
+    },
+    {
+      "id": "4",
+      "courseNo": "2号教学-B-504",
+      "courseName": "马克思思想教室",
+      "score": "1",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1B504"
+    },{
+      "id": "5",
+      "courseNo": "1号教学-A-204",
+      "courseName": "毛泽东思想教室",
+      "score": "2",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1A204"
+    },{
+      "id": "6",
+      "courseNo": "1号 舞蹈房",
+      "courseName": "芭蕾基础训教室",
+      "score": "1号舞蹈房",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1-1"
+    },{
+      "id": "7",
+      "courseNo": "1号教学-B-316",
+      "courseName": "高等数学教室",
+      "score": "1",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1B316"
+    },{
+      "id": "8",
+      "courseNo": "1号教学-B-104",
+      "courseName": "生物教室",
+      "score": "2",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1B104"
+    },{
+      "id": "9",
+      "courseNo": "1号教学-B-504",
+      "courseName": "文学教室",
+      "score": "1",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1B504"
+    },{
+      "id": "10",
+      "courseNo": "2号教学-A-504",
+      "courseName": "艺术教室",
+      "score": "2",
+      "courseHour": "20:00-22.00",
+      "term": "8.30-12.00   1.50-3.20",
+      "number": "1A504"
+    }
+  ]
+}
