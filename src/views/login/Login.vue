@@ -1,6 +1,7 @@
 <template>
     <div class="login">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" size="small" label-width="80px" class="ruleForm">
+           <p>导师遴选系统</p>
             <el-form-item label="用户名" prop="userName">
                 <el-input v-model="ruleForm.userName"></el-input>
             </el-form-item>
@@ -56,6 +57,8 @@
                             let users = res.data
                            let rs =  users.find((u) => u.userName == this.ruleForm.userName && u.pwd == this.ruleForm.pwd)
                             if (rs){
+                              //登录之前清空permission
+                              this.$store.commit('setPermission',[])
                                 //存进去了  存入数据   一定要记住    不但把登陆信息存入vuex中，同时存入sessionStorage
                                 this.$store.commit('setuser',rs)
                             sessionStorage.setItem('curruser',JSON.stringify(rs))
@@ -101,24 +104,30 @@
 
        position: absolute;
        left: 50%;
-       top: 50%;
+       top: 30%;
        margin-left: -180px;
-       margin-top: -180px;
-       border: 1px solid #eeeeee;
-       width: 350px;
-       height: 350px;
+       /*margin-top: -100px;*/
+       /*border: 1px solid #eeeeee;*/
+       border-radius: 10px;
+       width: 300px;
+       height: 250px;
        box-sizing: border-box;
        padding-right: 30px;
-       padding-top: 60px;
-       background: rgba(255,255,255,0.6);
+       padding-top: 30px;
+       background: rgba(255,255,255,0.2);
    }
     .login{
-        background-image: url("../../assets/bg_banner.png");
+        background-image: url("../../assets/sky.jpg");
         position: absolute;
         left: 0;
         top: 0;
         height: 100%;
         width: 100%;
         background-size: cover;
+    }
+    p{
+      margin-left: 100px;
+      margin-top: -10px;
+      color: #484848;
     }
 </style>
