@@ -1,6 +1,6 @@
 <template>
     <div>
-        对不起  滚蛋吧!!!!!!!!!!!!
+        对不起  页面消失
     </div>
 </template>
 

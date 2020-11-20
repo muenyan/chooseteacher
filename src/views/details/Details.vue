@@ -1,10 +1,10 @@
 <template>
-    <div >密码修改</div>
+    <div>详情页面</div>
 </template>
 
 <script>
     export default {
-        name: "PWD"
+        name: "Details"
     }
 </script>
 

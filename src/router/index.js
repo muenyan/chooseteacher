@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import axios from 'axios'
-import {get,post} from '../request/http'
+import { get, post } from "../request/http";
 import store from '../store'
 import Login from "../views/login/Login";
 import Home from "../views/home/Home";
@@ -25,7 +25,7 @@ const routes = [
     path: '/',
     name: 'Login',
     component: Login
-  },
+  }
 ]
 const dynamicRoutes = [
 
@@ -82,8 +82,8 @@ router.beforeEach((to,from,next) =>{
   //如果permission中没数据则进行请求
     if(!store.state.permission ||store.state.permission.length==0){
       let role = curruser.role
-      get('/api/permission.json').then((p) => {
-        let permission = p.data[role]
+      axios.get('/api/permission.json').then((p) => {
+        let permission = p.data.data[role]
         //通过菜单和动态路由进行比对，获取当前用户所拥有的路由
         let  dr = permission && getUserRoutes(permission)
         console.log(dr)

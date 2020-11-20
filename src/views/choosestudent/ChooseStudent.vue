@@ -1,5 +1,8 @@
 <template>
-    <div>我的学生</div>
+    <div>
+        选择学生
+
+    </div>
 </template>
 
 <script>

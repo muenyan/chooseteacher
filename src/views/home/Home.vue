@@ -2,7 +2,8 @@
 
     <div class="home">
         <div class="side">
-            <p class="title">选课系统</p>
+            <p class="title">生科院导师遴选系统</p>
+
             <el-menu
                     :default-active="active"
                     class="el-menu"
@@ -37,21 +38,19 @@
         </div>
         <div class="main">
             <div class="header">
-               <router-link to="/"> <i class="iconfont icon-zhuce">更改用户</i></router-link>
-
                 <div class="h-right">
        <el-dropdown @command="handleCommand" >
                           <span class="el-dropdown-link  dddd">
-
-
-                              <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
-                              <span style="font-size: 20px; margin-right: 20px">
-<!--                                  {{ $store.state.curruser.userName}}  最简单的写法-->
-                                  {{ curruser.name}}
-
+                              <span style="position: absolute;top: 8px;right:110px;display: inline-block;width: 30px;height: 30px;border-radius: 20px;border: 1px solid red">
+                                  {{ curruser.img}}
                               </span>
+                              <span style="font-size: 20px; margin-right: 20px">
+                                  {{ curruser.username}}<i class="el-icon-arrow-down el-icon--right"></i>
+                              </span>
+
                           </span>
         <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="base">个人资料</el-dropdown-item>
             <el-dropdown-item command="update">修改密码</el-dropdown-item>
             <el-dropdown-item command="exit">退出</el-dropdown-item>
         </el-dropdown-menu>
@@ -75,8 +74,9 @@
             return {
                 active:'',
                 activeIndex: '1',
-                activeIndex2: '1'
+                activeIndex2: '1',
             };
+
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -93,22 +93,28 @@
             },
             handleCommand(command) {
                 if (command == 'exit'){
-                    //清空vuex
-                    this.$store.commit('emptyState')
                     //清空session
                     sessionStorage.clear()
                     //跳转登录
                     this.$router.push('/')
+                } if (command == 'update'){
+                    //清空session
+                    sessionStorage.clear()
+                    this.$router.push('/home/pwd')
+                }if (command == 'base'){
+                    //清空session
+                    sessionStorage.clear()
+                    this.$router.push('/home/info')
                 }
-            }
 
-
+            },
         },
         computed:{
             ...mapState(['curruser','permission']),
         },
         mounted(){
             this.active = this.$route.name
+            // this.getList()
         }
     }
 </script>
@@ -121,26 +127,28 @@
         position:absolute;
         left: 0;
         top: 0;
-        width: 220px;
+        width: 200px;
         bottom: 0;
-        background: black;
+        background: #100d0d;
         overflow: auto;
+    font-size: 20px;
+
     }
 .side .title{
         line-height: 50px;
     text-align: center;
-    color: rgba(255,255,255,0.8);
+    color: #ffecd6;
+
 
     }
 .main{
         flex: 1;
         /*position: relative;*/
         position: absolute;
-        left: 220px;
+        left: 200px;
         top: 0;
         right: 0;
         bottom: 0;
-        background: red;
     }
 .main .header{
         position: fixed;

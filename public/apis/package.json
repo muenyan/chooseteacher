@@ -3,15 +3,15 @@
   "data": [
     {
     "id": "1",
-    "userName": "admin",
-    "pwd": "123",
+    "username": "admin",
+    "password": "123",
     "role": "1",
       "mailbox": "1234@qq.com",
       "tel": "18265313393",
       "name": "管理员"
   },
     { "id": "2",
-      "userName": "wer",
+      "username": "wer",
       "pwd": "123",
       "role": "2",
       "mailbox": "12345@qq.com",
