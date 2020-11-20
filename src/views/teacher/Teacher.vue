@@ -46,60 +46,47 @@
                 <el-table-column
                         prop="name"
                         label="姓名"
-                        width="80">
+                        width="120">
                 </el-table-column>
                 <el-table-column
                         prop="teachernumber"
                         label="教工号"
-                        width="120"
+                        width="150"
                 >
                 </el-table-column>
 
                 <el-table-column
                         prop="sex"
                         label="性别"
-                        width="60"
+                        width="80"
                 >
                 </el-table-column>
                 <el-table-column
                         prop="politicaloutlook"
                         label="政治面貌"
-                width="100">
+                width="210">
                 </el-table-column>
                 <el-table-column
                         prop="education"
                         label="学历"
-                        width="100"
+                        width="200"
                 >
                 </el-table-column>
 
                 <el-table-column
                         prop="academicdegree"
                         label="学位"
-                        width="110"
+                        width="200"
                 >
                 </el-table-column>
                 <el-table-column
-                        prop="professionaltitle"
-                        label="课题"
-                        width="120"
+
+                        width="290px"
+                        label="操作"
                 >
-                </el-table-column>
-                <el-table-column
-                        prop="researchdirection"
-                        label="研究方向"
-                width="165">
-                </el-table-column>
-                <el-table-column
-                        prop="school"
-                        label="毕业院校"
-                        width="165">
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        width="160px"
-                >
+
                     <template slot-scope="scope">
+
                         <el-button
                                 size="mini"
                                 @click="handleEdit(scope.$index, scope.row)"
@@ -111,6 +98,12 @@
                                 @click="handleDelete(scope.$index, scope.row)"
                                 :disabled="pop"
                         >删除</el-button>
+                        <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handlereset(scope.$index, scope.row)"
+                                :disabled="pop"
+                        >重置密码</el-button>
 
                     </template>
                 </el-table-column>
@@ -169,15 +162,6 @@
                             <el-option label="硕士" value="硕士"></el-option>
                             <el-option label="博士" value="博士"></el-option>
                         </el-select>
-                    </el-form-item>
-                    <el-form-item label="课题" prop="professionaltitle" :label-width="formLabelWidth">
-                        <el-input v-model="form.professionaltitle" size="mini" style="width: 230px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="研究方向" prop="researchdirection" :label-width="formLabelWidth">
-                        <el-input v-model="form.researchdirection" size="mini" style="width: 230px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="毕业院校" prop="school" :label-width="formLabelWidth">
-                        <el-input v-model="form.school" size="mini" style="width: 230px"></el-input>
                     </el-form-item>
 
 
@@ -247,9 +231,6 @@
                     politicaloutlook: '',
                     education: '',
                     academicdegree:'',
-                    professionaltitle:'',
-                    researchdirection:'',
-                    school: '',
                 },
                 // treeArrayDate:'',
                 eidtIndex:0,
@@ -422,6 +403,35 @@
 
 
             },
+            handlereset(index, row){
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+
+                }).then(() => {
+                    // let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    this.formId.id=this.tableData[newIndex].id
+                    this.$post('/api/TutorSelectionSystem_war/admin/resetTeacher',this.$Qs.stringify(this.formId)).then((res) =>{
+                        console.log(res)
+                        if(res.code==200){
+                            this.$message({
+                                type: 'success',
+                                message: '重置密码成功!'
+                            });
+                        }else {
+                            alert(res.msg)
+                        }
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消重置密码'
+                    });
+                });
+            },
             getList(){
                 this.$post('/api/TutorSelectionSystem_war/admin/findTeacher',this.$Qs.stringify()).then((res) =>{
                     if(res.code == 200) {
@@ -491,14 +501,6 @@
                 }else {
 
                 }
-
-
-
-
-
-
-
-
             },
             handleBatchAdd(){
                this.outerVisible = true

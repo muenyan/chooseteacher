@@ -41,16 +41,16 @@
                 <div class="h-right">
        <el-dropdown @command="handleCommand" >
                           <span class="el-dropdown-link  dddd">
-
-
-                              <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
-                              <span style="font-size: 20px; margin-right: 20px">
-<!--                                  {{ $store.state.curruser.userName}}  最简单的写法-->
-                                  {{ curruser.username}}
-
+                              <span style="position: absolute;top: 8px;right:110px;display: inline-block;width: 30px;height: 30px;border-radius: 20px;border: 1px solid red">
+                                  {{ curruser.img}}
                               </span>
+                              <span style="font-size: 20px; margin-right: 20px">
+                                  {{ curruser.username}}<i class="el-icon-arrow-down el-icon--right"></i>
+                              </span>
+
                           </span>
         <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="base">个人资料</el-dropdown-item>
             <el-dropdown-item command="update">修改密码</el-dropdown-item>
             <el-dropdown-item command="exit">退出</el-dropdown-item>
         </el-dropdown-menu>
@@ -93,24 +93,21 @@
             },
             handleCommand(command) {
                 if (command == 'exit'){
-                    //清空vuex
-                    this.$store.commit('emptyState')
                     //清空session
                     sessionStorage.clear()
                     //跳转登录
                     this.$router.push('/')
+                } if (command == 'update'){
+                    //清空session
+                    sessionStorage.clear()
+                    this.$router.push('/home/pwd')
+                }if (command == 'base'){
+                    //清空session
+                    sessionStorage.clear()
+                    this.$router.push('/home/info')
                 }
+
             },
-            // getList(){
-            //     //this.$axios.get('/api/teacher.json')返回结果是peomise
-            //     //'/api/teacher.json?page=2&pagesize=10'  一般有接口这样写
-            //     this.$get('/api/permission.json').then((res) =>{
-            //         console.log(res)
-            //         let tr =res.data
-            //         console.log(tr)
-            //         this.permission = tr.data
-            //     })
-            // },
         },
         computed:{
             ...mapState(['curruser','permission']),
@@ -132,7 +129,7 @@
         top: 0;
         width: 200px;
         bottom: 0;
-        background: #443d3d;
+        background: #100d0d;
         overflow: auto;
     font-size: 20px;
 

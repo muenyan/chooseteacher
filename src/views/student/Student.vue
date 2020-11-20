@@ -35,7 +35,8 @@
             <el-table
                     :data="tableData.slice((currentpage-1)*pagesize,currentpage*pagesize)"
                     border
-                    style="width: 100%">
+                    style="width: 100%"
+                    @selection-change="handleBa">
                 <el-table-column
                         type="selection"
                         width="55"
@@ -75,10 +76,12 @@
                         <template slot-scope="scope">
                             <el-button
                                     size="mini"
+                                    :disabled="pop"
                                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                             <el-button
                                     size="mini"
                                     type="danger"
+                                    :disabled="pop"
                                     @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -129,11 +132,13 @@
         name: "Student",
         data(){
             return{
+                pop:false,
+                handleList:[],
+                currentpage:1,
                 pagesize:5,
                 dangkang:'学生添加',
                 dialogFormVisible: false,
                 formLabelWidth: '300px',
-                currentpage:1,
                 tableData:[],
                 rules: {
                     name: [
@@ -153,6 +158,9 @@
                     grade:'',
                     phone:'',
                     sex:''
+                },
+                formId:{
+                    id:''
                 }
             }
         },
@@ -176,16 +184,9 @@
                         this.$post('/api/TutorSelectionSystem_war/admin/addStudent',this.$Qs.stringify(this.form)).then((res) =>{
                             console.log(res)
                             if (res.code==200){
-                                this.$post('/api/TutorSelectionSystem_war/admin/findTeacher',this.$Qs.stringify()).then((res) =>{
-                                    if(res.code == 200) {
-                                        this.tableData = res.list
-                                    }
-                                    if (res.code == 500){
-                                        alert('更新失败')
-                                    }
-                                })
+                               this.getList()
                             }else {
-
+                                    alert(res.msg)
                             }
                         })
                 }
@@ -209,17 +210,45 @@
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
-                this.currentpage = val
+                this.pagesize = val
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
-                this.pagesize = val
+                this.currentpage = val
             },
             handleEdit(index, row) {
                 console.log(index, row);
             },
             handleDelete(index, row) {
                 console.log(index, row);
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+
+                }).then(() => {
+                    // let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    this.formId.id=this.tableData[newIndex].id
+                    this.$post('/api/TutorSelectionSystem_war/admin/deleteStudent',this.$Qs.stringify(this.formId)).then((res) =>{
+                        console.log(res)
+                        if(res.code==200){
+                            this.getList()
+                        }else {
+                            alert(res.msg)
+                        }
+                    })
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
             },
             onSubmit(){
                 console.log(this.form)
@@ -235,7 +264,57 @@
             handleAdd(){
                 this.dialogFormVisible = true
             },
-            handleBatchDelete(){},
+            handleBa(handleList){
+                this.handleList = handleList
+                if (handleList.length>0){
+                    this.pop= true
+                }else {
+                    this.pop=false
+                }
+
+                // if (this.pop==true){
+                //     this.pop = false
+                // }else {
+                //
+                // }
+
+            },
+            handleBatchDelete(){
+                if (this.handleList.length>0){
+                    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+
+                    }).then(() => {
+                        let ids = this.handleList.map((item) => item.id)
+                        console.log(ids)
+                        this.$post('/api/TutorSelectionSystem_war/admin/deleteStudents',this.$Qs.stringify( {
+                            ids: ids
+                        }, { indices: false })).then((res)=>{
+                            console.log(res)
+                            if (res.code==200){
+                                this.getList()
+                            }else {
+                                alert(res.msg)
+                            }
+                        })
+
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                }else {
+
+                }
+
+            },
             handleBatchAdd(){},
             getList(){
                 this.$post('/api/TutorSelectionSystem_war/admin/findStudent',this.$Qs.stringify()).then((res) =>{

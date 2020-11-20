@@ -2,7 +2,7 @@
     <div>
         <el-form :model="curruser" status-icon  ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="登录名" prop="pass">
-                <el-input type="userName" v-model="curruser.userName" autocomplete="off"  :disabled="true"></el-input>
+                <el-input type="userName" v-model="curruser.username" autocomplete="off"  :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="邮箱" prop="checkPass">
                 <el-input type="text" v-model="curruser.mailbox" autocomplete="off"  ></el-input>

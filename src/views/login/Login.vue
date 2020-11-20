@@ -40,10 +40,14 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+
                         this.$post('/api/TutorSelectionSystem_war/user/login',this.$Qs.stringify(this.ruleForm)).then((res) => {
+                            if (res.code=='505'){
+                                alert('555')
+                            }
                             if(res.code == 200 || res.code == 201 || res.code == 202 ) {
                                 // 登录成功
-                                // console.log(res)
+                                console.log(res)
                                 this.$store.commit('setPermission',null)
                                 this.$store.commit('setuser',res.user)
                                 sessionStorage.setItem('curruser',JSON.stringify(res.user))

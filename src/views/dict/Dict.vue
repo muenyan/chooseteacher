@@ -27,22 +27,17 @@
                 <el-table-column
                         prop="startdate"
                         label="开始日期"
-                        width="100">
+                        width="230">
                 </el-table-column>
                 <el-table-column
                         prop="enddate"
                         label="结束日期"
-                        width="180">
+                        width="230">
                 </el-table-column>
                 <el-table-column
                         prop="selectgrade"
                         label="参与遴选活动的年级"
                         width="200">
-                </el-table-column>
-                <el-table-column
-                        prop="grade"
-                        label="年级"
-                        width="100">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -69,6 +64,7 @@
                             :label-width="formLabelWidth"
                             v-model="form.startdate"
                             type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -77,6 +73,7 @@
                             :label-width="formLabelWidth"
                             v-model="form.enddate"
                             type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -107,11 +104,15 @@
                 formLabelWidth: '300px',
                 tableData:[],
                 form:{
+                    id:'',
                     planname:'',
                     startdate:'',
                     enddate:'',
                     selectgrade:'',
-                }
+                },
+                formId:{
+                    id:''
+                },
             }
         },
         mounted() {
@@ -131,15 +132,30 @@
                     //调用接口  省略
                     //把数据添加到表格中
                     this.dialogFormVisible =false
-                    this.$post('/api/TutorSelectionSystem_war/admin/updatePlan',this.$Qs.stringify(this.form)).then((res) =>{
+                    this.$post('/api/TutorSelectionSystem_war/admin/createPlan',this.$Qs.stringify(this.form)).then((res) =>{
                         console.log(res)
+                        if (res.code==200) {
+                            this.getList()
+                        }else {
+                            alert(res.msg)
+                        }
                     })
                 }
                 else {
                     //修改
                     //调用修改接口，发送thhp请求
                     //修改表格中的数据
+                    console.log('6666666666')
                     this.dialogFormVisible =false
+                    this.form.id=this.tableData.id
+                    this.$get('/api/TutorSelectionSystem_war/admin/updatePlan',this.$Qs.stringify(this.form)).then((res) =>{
+                        console.log(res)
+                        if (res.code==200){
+                            this.getList()
+                        }else {
+                            alert(res.msg)
+                        }
+                    })
                 }
 
                 for(let key in this.form){
@@ -158,19 +174,72 @@
             },
             handleEdit(index, row) {
                 console.log(index, row);
+                this.dialogFormVisible = true
+                //清空form
+
+                for(let key in this.form){
+                    this.form[key] = ''
+                }
+
+                this.dangkang = '修改' //不能掉了他因为掉了会变成添加
+                let newRow = Object.assign( {},row)
+                console.log(newRow)
+                this.form = newRow
+                console.log(this.form.id)
+                this.eidtIndex = this.tableData.findIndex((t) =>t.id ==row.id)
             },
             handleDelete(index, row) {
                 console.log(index, row);
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+
+                }).then(() => {
+                    // let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    this.formId.id=this.tableData[newIndex].id
+                    this.$post('/api/TutorSelectionSystem_war/admin/deletePlan',this.$Qs.stringify(this.formId)).then((res) =>{
+                        console.log(res)
+                        if(res.code==200){
+                            this.getList()
+                        }else {
+                            alert(res.msg)
+                        }
+                    })
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             onSubmit(){
                 console.log(this.form)
             },
             handleAdd(){
+                this.dangkang='添加活动'
                 this.dialogFormVisible = true
+                for(let key in this.form){
+                    this.form[key] = ''
+                }
             },
             handleBatchDelete(){},
             handleBatchAdd(){},
-            getList(){}
+            getList(){
+                this.$post('/api/TutorSelectionSystem_war/admin/findPlan',this.$Qs.stringify()).then((res) =>{
+                    console.log(res)
+                    if (res.code==200){
+                        this.tableData=res.list
+                    }else {
+                        alert(res.msg)
+                    }
+                })
+            }
 
         }
     }

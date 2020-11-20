@@ -87,13 +87,12 @@ router.beforeEach((to,from,next) =>{
         //通过菜单和动态路由进行比对，获取当前用户所拥有的路由
         let  dr = permission && getUserRoutes(permission)
         //需要把该用户拥有的路由添加到router中
-        let temp=
-          {
+        let temp= {
             path: '/home',
             name: 'Home',
             component: Home,
             children:  dr
-          }
+        }
           //创建404路由：注意：404路由一定放在最后一个
         let notfound ={
           path: '*',
