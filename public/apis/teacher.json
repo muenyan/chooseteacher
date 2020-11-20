@@ -1,0 +1,77 @@
+{
+  "res": "true",
+  "data": {
+    "dt": [
+      {
+        "id": "1",
+        "name": "李小华",
+        "teachernumber": "2017101838",
+        "sex": "男",
+        "politicaloutlook": "党员",
+        "education": "放沙",
+        "academicdegree": "研究生",
+        "professionaltitle": "北京大学",
+        "researchdirection": "大数据分析",
+        "school": "ruanwan"
+      },
+      {
+        "id": "2",
+        "name": "李小华",
+        "teachernumber": "2017101838",
+        "Department": "1987-1-1",
+        "profile": "党员",
+        "number1": "研究生",
+        "Studentname": "北京大学",
+        "Studentnumber": "大数据分析",
+        "class": "ruanwan"
+      },
+      {
+        "id": "3",
+        "name": "李小华",
+        "teachernumber": "20171018384",
+        "Department": "1987-1-1",
+        "profile": "党员",
+        "number1": "研究生",
+        "Studentname": "北京大学",
+        "Studentnumber": "大数据分析",
+        "class": "ruanwan"
+      },
+      {
+        "id": "4",
+        "name": "李小华",
+        "teachernumber": "20171018383",
+        "Department": "1987-1-1",
+        "profile": "党员",
+        "number1": "研究生",
+        "Studentname": "北京大学",
+        "Studentnumber": "大数据分析",
+        "class": "ruanwan"
+      },
+      {
+        "id": "5",
+        "name": "小明",
+        "teachernumber": "20171018382",
+        "Department": "1987-1-1",
+        "profile": "党员",
+        "number1": "研究生",
+        "Studentname": "北京大学",
+        "Studentnumber": "大数据分析",
+        "class": "ruanwan"
+      },
+      {
+        "id": "6",
+        "name": "小李",
+        "teachernumber": "20171018381",
+        "Department": "1987-1-1",
+        "profile": "党员",
+        "number1": "研究生",
+        "Studentname": "北京大学",
+        "Studentnumber": "大数据分析",
+        "class": "ruanwan"
+      }
+    ],
+    "mm": ["党员","团员","群众"],
+    "edu": ["本科","研究生"],
+    "deg": ["学士","硕士","博士"]
+  }
+}

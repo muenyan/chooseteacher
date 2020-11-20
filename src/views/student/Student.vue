@@ -1,20 +1,262 @@
 <template>
     <div>
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-        </el-breadcrumb>
+        <div>
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/' }">系统管理</el-breadcrumb-item>
+                <el-breadcrumb-item >学生信息管理</el-breadcrumb-item>
+            </el-breadcrumb>
+            <div class="query-wrapper">
+                <el-form :inline="true" size="mini" :model="form" class="demo-form-inline">
+                    <el-form-item label="学生姓名:" >
+                        <el-input  placeholder="学生姓名" v-model="form.stuname" size="mini" style="width: 150px"></el-input>
+                    </el-form-item>
+                    <!--                学号  专业 年级-->
+                    <el-form-item  label="学号:">
+                        <el-input  placeholder="学号" v-model="form.stunumber" style="width: 150px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="专业:">
+                        <el-input  placeholder="专业" v-model="form.profession" style="width: 150px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="年级:">
+                        <el-input  placeholder="年级" v-model="form.grade" style="width: 150px"></el-input>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button type="primary" @click="handleAdd">添加</el-button>
+
+                        <el-button type="primary"  @click="handleBatchDelete" >批量删除</el-button>
+                        <el-button type="primary"  @click="handleBatchAdd" >批量添加</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+        <div class="tbl-wrapper">
+            <el-table
+                    :data="tableData.slice((currentpage-1)*pagesize,currentpage*pagesize)"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        type="selection"
+                        width="55"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="stuname"
+                        label="学生姓名"
+                        width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="sex"
+                        label="性别"
+                        width="100">
+                </el-table-column>
+                <el-table-column
+                        prop="stunumber"
+                        label="学号"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="profession"
+                        label="专业"
+                        width="200">
+                </el-table-column>
+                <el-table-column
+                        prop="grade"
+                        label="年级"
+                        width="100">
+                </el-table-column>
+                <el-table-column
+                        prop="phone"
+                        label="电话"
+                        width="180">
+                </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+            </el-table>
+        </div>
+       <div> <el-dialog :title="dangkang" :visible.sync="dialogFormVisible">
+           <el-form :model="form"   :rules="rules" ref="form">
+               <el-form-item label="学生姓名" prop="stuname" :label-width="formLabelWidth">
+                   <el-input v-model="form.stuname" size="mini" style="width: 230px"></el-input>
+               </el-form-item>
+               <el-form-item label="学号" prop="stunumber" :label-width="formLabelWidth">
+                   <el-input v-model="form.stunumber" size="mini" style="width: 230px"></el-input>
+               </el-form-item>
+               <el-form-item label="专业" prop="profession" :label-width="formLabelWidth">
+                   <el-input v-model="form.profession" size="mini" style="width: 230px"></el-input>
+               </el-form-item>
+               <el-form-item label="年级" prop="grade" :label-width="formLabelWidth">
+                   <el-input v-model="form.grade" size="mini" style="width: 230px"></el-input>
+               </el-form-item>
+               <el-form-item label="性别:" :label-width="formLabelWidth">
+                   <el-input  v-model="form.sex" size="mini" style="width: 230px"></el-input>
+               </el-form-item>
+               <el-form-item label="电话:" :label-width="formLabelWidth">
+                   <el-input   v-model="form.phone" size="mini" style="width: 230px"></el-input>
+               </el-form-item>
+           </el-form>
+           <div slot="footer" class="dialog-footer">
+               <el-button @click="dialogFormVisible = false">取 消</el-button>
+               <el-button type="primary" @click="handleSave">确 定</el-button>
+           </div>
+       </el-dialog></div>
+        <el-pagination
+                background
+                layout="total,prev, pager, next,sizes"
+                :page-size="pagesize"
+                :page-sizes="[5, 10, 20, 30]"
+                :total="tableData.length"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+        >
+        </el-pagination>
     </div>
+
 </template>
 
 <script>
     export default {
-        name: "Student"
+        name: "Student",
+        data(){
+            return{
+                pagesize:5,
+                dangkang:'学生添加',
+                dialogFormVisible: false,
+                formLabelWidth: '300px',
+                currentpage:1,
+                tableData:[],
+                rules: {
+                    name: [
+                        { required: true, message: '请输入姓名', trigger: 'blur' },
+                        { min:2,max:5, message: '请正确输入', trigger: 'blur' },
+                        { number: true, message: '请正确输入', trigger: 'blur' },
+                    ],
+                    number: [
+                        { required: true, message: '请输入教工号', trigger: 'blur' },
+
+                    ],
+                },
+                form:{
+                    stuname:'',
+                    stunumber:'',
+                    profession:'',
+                    grade:'',
+                    phone:'',
+                    sex:''
+                }
+            }
+        },
+        mounted() {
+
+            this.getList()
+        },
+        methods:{
+            handleSave(){
+                //第一步： 通过原始的对象生成一个新的对象
+                /*第二步：
+                  1）首先要判断本次是添加还是修改？
+                * 如果是添加，则调用添加接口。如果是修改，则调用修改接口。这里是调用接口省略
+                * 2） 如果是修改，则修改表格中对应行的数据。如果是添加，则添加到表格中
+                */
+                if (this.dangkang == '学生添加'){
+                    //添加
+                    //调用接口  省略
+                    //把数据添加到表格中
+                        this.dialogFormVisible =false
+                        this.$post('/api/TutorSelectionSystem_war/admin/addStudent',this.$Qs.stringify(this.form)).then((res) =>{
+                            console.log(res)
+                            if (res.code==200){
+                                this.$post('/api/TutorSelectionSystem_war/admin/findTeacher',this.$Qs.stringify()).then((res) =>{
+                                    if(res.code == 200) {
+                                        this.tableData = res.list
+                                    }
+                                    if (res.code == 500){
+                                        alert('更新失败')
+                                    }
+                                })
+                            }else {
+
+                            }
+                        })
+                }
+                else {
+                    //修改
+                    //调用修改接口，发送thhp请求
+                    //修改表格中的数据
+                        this.dialogFormVisible =false
+
+                }
+                //清空form
+                // Object.keys(this.form).forEach((key) =>{// Object.keys是取他的建返回
+                //     return this.form[key] = ''
+                // })
+
+                for(let key in this.form){
+                    this.form[key] = ''
+                }
+                //隐藏dialog
+
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.currentpage = val
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.pagesize = val
+            },
+            handleEdit(index, row) {
+                console.log(index, row);
+            },
+            handleDelete(index, row) {
+                console.log(index, row);
+            },
+            onSubmit(){
+                console.log(this.form)
+                this.$post('/api/TutorSelectionSystem_war/admin/findStudent',this.$Qs.stringify(this.form)).then((res) =>{
+                    console.log(res)
+                    if (res.code==200){
+                        this.tableData=res.list
+                    }else {
+                        alert('查询失败')
+                    }
+                })
+            },
+            handleAdd(){
+                this.dialogFormVisible = true
+            },
+            handleBatchDelete(){},
+            handleBatchAdd(){},
+            getList(){
+                this.$post('/api/TutorSelectionSystem_war/admin/findStudent',this.$Qs.stringify()).then((res) =>{
+                    console.log(res)
+                    if (res.code==200){
+                        this.tableData=res.list
+                    }else {
+                        alert('查询失败')
+                    }
+                })
+            }
+
+        }
     }
 </script>
 
 <style scoped>
-
+.tbl-wrapper{
+    margin-top: 30px;
+}
+    .query-wrapper{
+        margin-top: 20px;
+    }
 </style>

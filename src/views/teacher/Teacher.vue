@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="teacther-a">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">系统管理</el-breadcrumb-item>
             <el-breadcrumb-item>教师信息管理</el-breadcrumb-item>
@@ -8,21 +8,19 @@
 <!--查询-->
         <div class="query-wrapper">
             <el-form :inline="true" size="mini" :model="formInline" class="demo-form-inline">
-                <el-form-item label="姓名:">
-                    <el-input v-model="input" placeholder="姓名"></el-input>
+                <el-form-item label="教师姓名:">
+                    <el-input v-model="formInline.name" placeholder="教师姓名"></el-input>
                 </el-form-item>
-                <el-form-item label="性别:" >
-                    <el-select  v-model="form.sex" >
-                        <el-option label="请选择" value="0"></el-option>
-                        <el-option label="男" value="1"></el-option>
-                        <el-option label="女" value="2"></el-option>
-                    </el-select>
+<!--                学号  专业 年级-->
+                <el-form-item label="教师职工号:">
+                    <el-input v-model="formInline.teachernumber" placeholder="教师职工号"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                     <el-button type="primary" @click="handleAdd">添加</el-button>
 
                     <el-button type="primary"  @click="handleBatchDelete" >批量删除</el-button>
+                    <el-button type="primary"  @click="handleBatchAdd" >批量添加</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -48,56 +46,93 @@
                 <el-table-column
                         prop="name"
                         label="姓名"
-                        width="180">
+                        width="80">
                 </el-table-column>
                 <el-table-column
-                        prop="sex"
-                        label="性别"
-                        width="180"
-                        :formatter="handleSex">
+                        prop="teachernumber"
+                        label="教工号"
+                        width="120"
+                >
                 </el-table-column>
 
                 <el-table-column
-                        prop="birthday"
-                        label="出生日期"
-                        :formatter="handleData"
+                        prop="sex"
+                        label="性别"
+                        width="60"
                 >
                 </el-table-column>
                 <el-table-column
-                        prop="zzmm"
-                        label="政治面貌">
+                        prop="politicaloutlook"
+                        label="政治面貌"
+                width="100">
                 </el-table-column>
                 <el-table-column
                         prop="education"
-                        label="学历">
+                        label="学历"
+                        width="100"
+                >
+                </el-table-column>
+
+                <el-table-column
+                        prop="academicdegree"
+                        label="学位"
+                        width="110"
+                >
                 </el-table-column>
                 <el-table-column
-                        prop="degree"
-                        label="学位">
+                        prop="professionaltitle"
+                        label="课题"
+                        width="120"
+                >
                 </el-table-column>
                 <el-table-column
-                        prop="graduation"
-                        label="毕业院校">
+                        prop="researchdirection"
+                        label="研究方向"
+                width="165">
                 </el-table-column>
                 <el-table-column
-                        prop="direction"
-                        label="研究方向">
+                        prop="school"
+                        label="毕业院校"
+                        width="165">
                 </el-table-column>
                 <el-table-column
-                       >
+                        fixed="right"
+                        width="160px"
+                >
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                                @click="handleEdit(scope.$index, scope.row)"
+                                :disabled="pop"
+                        >编辑</el-button>
                         <el-button
                                 size="mini"
                                 type="danger"
-                                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                @click="handleDelete(scope.$index, scope.row)"
+                                :disabled="pop"
+                        >删除</el-button>
 
                     </template>
                 </el-table-column>
             </el-table>
    </div>
+        <div>
+            <el-dialog title="批量添加信息" :visible.sync="outerVisible">
+                <el-dialog
+                        width="30%"
+                        title="内层 Dialog"
+                        :visible.sync="innerVisible"
+                        append-to-body>
+                </el-dialog>
+                <span>请选择文件夹</span>
+                <from>
+                    <input type="file" value="打开文件夹">
+                </from>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="outerVisible = false">取 消</el-button>
+                </div>
+            </el-dialog>
+        </div>
         <div class="yang">
 <!--            各种dialog-->
             <el-dialog :title="dangkang" :visible.sync="dialogFormVisible">
@@ -105,45 +140,47 @@
                         <el-form-item label="姓名" prop="name" :label-width="formLabelWidth">
                             <el-input v-model="form.name" size="mini" style="width: 230px"></el-input>
                         </el-form-item>
-                    <el-form-item size="mini" label="出生日期" :label-width="formLabelWidth">
-                        <el-date-picker
-                                v-model="form.birthday"
-
-                                placeholder="选择日期时间"
-
-                                :picker-options="pickerOptions">
-                        </el-date-picker>
+                    <el-form-item label="教工号" prop="teachernumber" :label-width="formLabelWidth" >
+                        <el-input v-model="form.teachernumber"  :disabled="thn" size="mini" style="width: 230px"></el-input>
                     </el-form-item>
-
-                    <el-form-item size="mini" label="政治面貌" :label-width="formLabelWidth">
-                        <el-select v-model="form.zzmm" placeholder="请选择活动区域">
-                            <el-option v-for="(item,idx) in mm" :key="idx" :label="item" :value="item"></el-option>
+                    <el-form-item label="性别" :label-width="formLabelWidth">
+                        <el-select v-model="form.sex" placeholder="性别">
+                            <el-option label="男" value="男"></el-option>
+                            <el-option label="女" value="女"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item size="mini" label="学历" :label-width="formLabelWidth">
-                        <el-select v-model="form.education" >
-                            <el-option v-for="(item,idx) in edu" :key="idx" :label="item" :value="item"></el-option>
+                    <el-form-item label="政治面貌" :label-width="formLabelWidth">
+                        <el-select v-model="form.politicaloutlook" placeholder="政治面貌">
+                            <el-option label="党员" value="党员"></el-option>
+                            <el-option label="团员" value="团员"></el-option>
+                            <el-option label="群众" value="群众"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="性别:" size="mini" :label-width="formLabelWidth">
-                        <el-select v-model="form.sex" >
-                            <el-option label="请选择" value="0"></el-option>
-                            <el-option label="男" value="1"></el-option>
-                            <el-option label="女" value="2"></el-option>
+                    <el-form-item label="学历" :label-width="formLabelWidth">
+                        <el-select v-model="form.education" placeholder="政治面貌">
+                            <el-option label="专科" value="专科"></el-option>
+                            <el-option label="本科" value="本科"></el-option>
+                            <el-option label="研究生" value="研究生"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item size="mini" label="学位" :label-width="formLabelWidth">
-                        <el-select v-model="form.degree" >
-                            <el-option v-for="(item,idx) in deg" :key="idx" :label="item" :value="item"></el-option>
+                    <el-form-item label="学位" :label-width="formLabelWidth">
+                        <el-select v-model="form.academicdegree" placeholder="政治面貌">
+                            <el-option label="学士" value="学士"></el-option>
+                            <el-option label="硕士" value="硕士"></el-option>
+                            <el-option label="博士" value="博士"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="课题" prop="professionaltitle" :label-width="formLabelWidth">
+                        <el-input v-model="form.professionaltitle" size="mini" style="width: 230px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="研究方向" prop="researchdirection" :label-width="formLabelWidth">
+                        <el-input v-model="form.researchdirection" size="mini" style="width: 230px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="毕业院校" prop="school" :label-width="formLabelWidth">
+                        <el-input v-model="form.school" size="mini" style="width: 230px"></el-input>
+                    </el-form-item>
 
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item size="mini" label="毕业院校" :label-width="formLabelWidth">
-                        <el-input v-model="form.graduation" placeholder="请输入内容" style="width: 217px"></el-input>
-                    </el-form-item>
-                    <el-form-item size="mini" label="研究方向" :label-width="formLabelWidth">
-                        <el-input v-model="form.direction" placeholder="请输入内容" style="width: 217px"></el-input>
-                    </el-form-item>
+
 
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -181,48 +218,38 @@
             }
 
             return {
+                thn:false,
+                outerVisible: false,
+                innerVisible: false,
+                pop:false,
                 input:'',
+                StudentNumber:'',
+                Department:'',
                 id:0,
                     handleList:[],
                 // batchDeleteArr:[],
                 name: [
                     { validator: checkAge, trigger: 'blur' }
                 ],
-
-                pickerOptions: {
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
                 dialogFormVisible: false,
                 handle: false,
+                formBj:{
+                    id:''
+                },
+                formId:{
+                    id:''
+                },
                 form: {
-                    sex: '请选择',
+                    id:'',
+                    sex: '',
                     name: '',
+                    teachernumber: '',
+                    politicaloutlook: '',
                     education: '',
-                    zzmm: '',
-                    degree: '',
-                    birthday:'',
-                    graduation:'',
-                    direction:'',
-                    input: '',
+                    academicdegree:'',
+                    professionaltitle:'',
+                    researchdirection:'',
+                    school: '',
                 },
                 // treeArrayDate:'',
                 eidtIndex:0,
@@ -234,18 +261,23 @@
                 formLabelWidth: '300px',
                 dangkang:'教师添加',
                 tableData: [],
-                mm:[],
-                edu:[],
-                deg:[],
                 formInline: {
-                    name: '',
-                    sex: '0'
+                    name:'',
+                    teachernumber:''
                 },
+                //ids:[]
                 rules: {
                     name: [
                         { required: true, message: '请输入姓名', trigger: 'blur' },
-                        { min:2,max:5, message: '请正确输入', trigger: 'blur' },
+                        { min:1,max:5, message: '请正确输入', trigger: 'blur' },
                         { number: true, message: '请正确输入', trigger: 'blur' },
+                    ],
+                    teachernumber:[
+                        { required: true, message: '请输入教职工号', trigger: 'blur' }
+                        ],
+                    number: [
+                        { required: true, message: '请输入教工号', trigger: 'blur' },
+
                     ],
                 }
             }
@@ -255,9 +287,8 @@
             this.getList()
         },
         methods:{
-            handleSave(){
+            handleSave(index,row){
                 //第一步： 通过原始的对象生成一个新的对象
-                let obj = Object.assign({},this.form)
                /*第二步：
                  1）首先要判断本次是添加还是修改？
                * 如果是添加，则调用添加接口。如果是修改，则调用修改接口。这里是调用接口省略
@@ -268,21 +299,41 @@
                     //调用接口  省略
                     //把数据添加到表格中
 
-                    if (this.form.name=='',this.form.name.length>5){
+                    if (this.form.name==''){
+                            this.dialogFormVisible=true
+                    }else  {
 
-                    }else {
-                        this.tableData.push(obj)
+                        this.dialogFormVisible =false
+                        this.$post('/api/TutorSelectionSystem_war/admin/addTeacher',this.$Qs.stringify(this.form)).then((res) =>{
+                            console.log(res)
+                            if (res.code==200){
+                                //刷新数据
+                               this.getList()
+                            }
+                    else {
+                                alert('添加失败')
+                            }
+                        })
                     }
                 }
                 else {
                     //修改
                     //调用修改接口，发送thhp请求
                     //修改表格中的数据
-                    if (this.form.name=='',this.form.name.length>5){
 
-                    }else {
-                        this.tableData.splice(this.eidtIndex,1,obj)
-                    }
+                        this.dialogFormVisible=false
+                       console.log(this.form)
+                    this.$post('/api/TutorSelectionSystem_war/admin/editTeacher',this.$Qs.stringify(this.form)).then((res) =>{
+                        console.log(res)
+                        if (res.code==200){
+                            //刷新数据
+                            this.getList()
+                        }
+                        else {
+                            alert(res.msg)
+                        }
+                    })
+
 
                 }
                 //清空form
@@ -294,103 +345,92 @@
                     this.form[key] = ''
                 }
                 //隐藏dialog
-                this.dialogFormVisible = false
+
             },
             handleAdd(){
                 Object.keys(this.form).forEach((key) =>{
                     return this.form[key] = ''
                 })
        this.dialogFormVisible =true
-
+                this.dangkang = '教师添加'
+                this.thn=false
             },
             //查询
             onSubmit() {
-               // //调用后台的接口传递参数，获取数据赋值给tableData
-               //  //get固定写法   查询
-               //  this.$axios.get('/',{
-               //      params:{
-               //          name:this.formInline.name,
-               //          sex:this.formInline.sex
-               //      }
-               //  }).then((res) =>{
-               //      //把数据赋值给tableData
-               //  })
-               //
-               //  //如果是post请求做法如下
-               //  this.$axios.post('',this.formInline).then((res) =>{
-               //      //把数据赋值给tableData
-               //  })
-                this.$get('/api/teacher.json').then((res) =>{
-                    let rs = res.data
-                    this.tableData = rs.dt
-                    for (let i = 0; i <this.tableData.length ; i++) {
-
-                     if (this.form.sex == 1){
-                         let newSex = this.tableData.filter(o => o.sex==1)
-                         this.tableData = newSex
-                     }else {
-                         let newIem =this.tableData.filter(u => u.sex==2)
-                         this.tableData = newIem
-                     }
-                    }
-                    const input = this.input
-                    let newInput  = this.tableData.filter(p => p.name.indexOf(input)!==-1)
-                    this.tableData =newInput
-                })
+                console.log(this.formInline)
+               this.$post('/api/TutorSelectionSystem_war/admin/findTeacher',this.$Qs.stringify(this.formInline)).then((res) =>{
+                   console.log(res)
+                   if (res.code==200){
+                       this.tableData=res.list
+                   }else {
+                       alert('查询失败')
+                   }
+               })
 
 
             },
             handleEdit(index, row) {
+                this.thn=true
                 //1.弹出dialog
                 this.dialogFormVisible = true
                 //清空form
+
                 for(let key in this.form){
                     this.form[key] = ''
                 }
+
                 this.dangkang = '教师信息修改' //不能掉了他因为掉了会变成添加
                 let newRow = Object.assign( {},row)
                 this.form = newRow
-                this.eidtIndex = this.tableData.findIndex((t) =>{
-                    return t.id ==row.id
-                })
-                //保存单击行的索引
+                console.log(this.form)
+                this.eidtIndex = this.tableData.findIndex((t) =>t.id ==row.id)
+
             },
             handleDelete(index, row) {
                 console.log(index, row);
 
                 //通过要删除的行的id去数组中进行查询到该行的索引
-                let newIdex = this.tableData.findIndex((t)=> {
-                    return t.id==row.id
-                })
-                this.tableData.splice(newIdex,1)
+                //
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+
+                }).then(() => {
+                    // let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    this.formId.id=this.tableData[newIndex].id
+                    this.$post('/api/TutorSelectionSystem_war/admin/deleteTeacher',this.$Qs.stringify(this.formId)).then((res) =>{
+                        console.log(res)
+                        if(res.code==200){
+                            this.getList()
+                        }else {
+                            alert(res.msg)
+                        }
+                    })
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+
+
             },
             getList(){
-                console.log('getList')
-                //this.$axios.get('/api/teacher.json')返回结果是peomise
-                //'/api/teacher.json?page=2&pagesize=10'  一般有接口这样写
-                this.$get('/api/teacher.json').then((res) =>{
-                    console.log(res)
-                    let rs = res.data
-                    this.tableData = rs.dt
-
-                    this.mm=rs.mm
-                    this.edu=rs.edu
-                    this.deg=rs.deg
+                this.$post('/api/TutorSelectionSystem_war/admin/findTeacher',this.$Qs.stringify()).then((res) =>{
+                    if(res.code == 200) {
+                        this.tableData = res.list
+                    }
+                    if (res.code == 500){
+                        alert('更新失败')
+                    }
                 })
-            },
-            handleData(row,column,cellValue,index){
-                if (!cellValue) return ''
-                //字符转成日期格式
-               let dt = new Date(cellValue)
-                let year = dt.getFullYear()
-                let month = dt.getMonth()+1<10 ? '0'+ (dt.getMonth()+1) : (dt.getMonth()+1)
-                let  day = dt.getDate() <10 ? '0'+ dt.getDate() : dt.getDate()
-                return year+'-'+month+'-'+day
-            },
-            handleSex(row,column,cellValue,index){
-                if (!cellValue) return ''
-              return cellValue == 1 ? '男':'女'
-
             },
             //分页代码
             handleCurrentChange(val){
@@ -403,21 +443,66 @@
             //批量删除
             handleBa(handleList){
                 this.handleList = handleList
-                console.log(handleList)
+             if (handleList.length>0){
+                 this.pop= true
+             }else {
+                 this.pop=false
+             }
+
+                // if (this.pop==true){
+                //     this.pop = false
+                // }else {
+                //
+                // }
+
             },
             handleBatchDelete() {
 
-                // this.handleList.splice()
-                for (let i = 0; i <this.handleList.length ; i++) {
-                let index = this.tableData.findIndex((item) =>{//// 默认去遍历tableData集合，将集合中的每个元素传入到item里，
-                    return item.id === this.handleList[i].id  // this.handleList[i].id 这个是外部的函数id
-                    console.log(index)
-                })
-                    this.tableData.splice(index,1)
-            }
+                if (this.handleList.length>0){
+                    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+
+                    }).then(() => {
+                        let ids = this.handleList.map((item) => item.id)
+                        console.log(ids)
+                        this.$post('/api/TutorSelectionSystem_war/admin/deleteTeachers',this.$Qs.stringify( {
+                            ids: ids
+                        }, { indices: false })).then((res)=>{
+                                console.log(res)
+                            if (res.code==200){
+                                this.getList()
+                            }else {
+                                alert(res.msg)
+                            }
+                        })
+
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                }else {
+
+                }
+
+
+
+
+
+
 
 
             },
+            handleBatchAdd(){
+               this.outerVisible = true
+            }
 
 
             },
@@ -445,7 +530,7 @@
 
 <style scoped>
 .tbl-wrapper{
-    margin-top: 30px;
+
 }
     .query-wrapper,.page-warpper{
         margin-top: 20px;
@@ -453,7 +538,6 @@
     .yang{
         width: 100%;
         height: 100%;
-        background: #42b983;
-        z-index: 99;
     }
+
 </style>
