@@ -99,7 +99,12 @@
             return{
                 tableData:[],
             }
+        },
+        methods:{
+            handleEdit(){},
+            handleDelete(){},
         }
+
     }
 </script>
 

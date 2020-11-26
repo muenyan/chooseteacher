@@ -10,9 +10,10 @@
         "children": [
           {"id": "15", "title": "教师管理", "name": "teacher","icons": "el-icon-star-off"},
           {"id": "14", "title": "学生管理", "name": "student","icons": "el-icon-question"},
-          {"id": "18", "title": "角色管理", "name": "role","icons": "el-icon-s-goods"},
-          {"id": "19", "title": "字典管理", "name": "dict","icons": "el-icon-upload"},
-          {"id": "11", "title": "网站用户", "name": "user","icons": "el-icon-close"}
+          {"id": "18", "title": "首页", "name": "role","icons": "el-icon-s-goods"},
+          {"id": "19", "title": "创建活动", "name": "dict","icons": "el-icon-upload"},
+          {"id": "11", "title": "活动详情", "name": "user","icons": "el-icon-close"},
+          {"id": "20", "title": "查询教师", "name": "queryteachers","icons": "el-icon-close"}
 
         ]
       },

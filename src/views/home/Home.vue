@@ -2,7 +2,7 @@
 
     <div class="home">
         <div class="side">
-            <p class="title">生科院导师遴选系统</p>
+            <p class="title">导师遴选系统</p>
 
             <el-menu
                     :default-active="active"

@@ -13,6 +13,10 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
+import moment from 'moment' //引入文件
+Vue.prototype.$config = moment;//赋值使用
+
+
 //import axios from 'axios'
 import {get} from "./request/http";
 import {post} from "./request/http";

@@ -17,6 +17,7 @@ import User from "../views/user/User";
 import InFo from "../views/info/InFo";
 import PWD from "../views/pwd/PWD";
 import NotFound from "../views/notfound/NotFound";
+import QueryTeachers from "../views/queryteachers/QueryTeachers";
 
 Vue.use(VueRouter)
 
@@ -24,7 +25,8 @@ const routes = [
   {
     path: '/',
     name: 'Login',
-    component: Login
+    component: Login,
+
   }
 ]
 const dynamicRoutes = [
@@ -33,14 +35,14 @@ const dynamicRoutes = [
     {path: 'student', name: 'student', component: Student},
     {path: 'choosestudent', name: 'choosestudent', component: ChooseStudent},
     {path: 'chooseteacher', name: 'chooseteacher', component: ChooseTeacher},
-    {path: 'user', name: 'user', component: User},
+    {path: 'user/:id', name: 'user', component: User},
     {path: 'mychoose', name: 'mychoose', component: MyChoose},
     {path: 'role', name: 'role', component: Role},
     {path: 'mystudent', name: 'mystudent', component: MyStudent},
     {path: 'dict', name: 'dict', component: Dict},
     {path: 'info', name: 'info', component: InFo},
     {path: 'pwd', name: 'pwd', component: PWD},
-
+    {path: 'queryteachers/:id', name: 'queryteachers', component: QueryTeachers},
 ]
 
 const router = new VueRouter({
@@ -91,6 +93,7 @@ router.beforeEach((to,from,next) =>{
             path: '/home',
             name: 'Home',
             component: Home,
+            redirect:'home/role',
             children:  dr
         }
           //创建404路由：注意：404路由一定放在最后一个
