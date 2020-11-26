@@ -30,12 +30,10 @@
 <!--                :data="tableData.slice((currentpage-1)*pagesize,currentpage*pagesize)"-->
 <!--                :data="tables.slice((currentpage-1)*pagesize,currentpage*pagesize)"-->
             <el-table
-
                     border
                     style="width: 100%"
                     @selection-change="handleBa"
                     :data="tableData.slice((currentpage-1)*pagesize,currentpage*pagesize)"
-
             >
                 <!--                        v-model="this.form.photo"-->
                 <el-table-column
@@ -46,30 +44,35 @@
                 <el-table-column
                         prop="name"
                         label="姓名"
-                        width="120">
+                        width="120"
+                        align="center">
                 </el-table-column>
                 <el-table-column
                         prop="teachernumber"
                         label="教工号"
                         width="150"
+                        align="center"
                 >
                 </el-table-column>
 
                 <el-table-column
                         prop="sex"
                         label="性别"
-                        width="80"
+                        width="70"
+                        align="center"
                 >
                 </el-table-column>
                 <el-table-column
                         prop="politicaloutlook"
                         label="政治面貌"
+                        align="center"
                 width="210">
                 </el-table-column>
                 <el-table-column
                         prop="education"
                         label="学历"
                         width="200"
+                        align="center"
                 >
                 </el-table-column>
 
@@ -80,13 +83,8 @@
                 >
                 </el-table-column>
                 <el-table-column
-
-                        width="290px"
-                        label="操作"
-                >
-
+                        label="操作">
                     <template slot-scope="scope">
-
                         <el-button
                                 size="mini"
                                 @click="handleEdit(scope.$index, scope.row)"
@@ -176,7 +174,7 @@
         <div class="page-warpper">
             <el-pagination
                     background
-                    layout="total,prev, pager, next,sizes"
+                    layout="total,prev, pager, next,sizes,jumper"
                     :page-size="pagesize"
                     :page-sizes="[5, 10, 20, 30]"
                     :total="tableData.length"
@@ -237,6 +235,8 @@
                 //分页代码
                 currentpage:1,
                 pagesize:5,
+                //总页数
+                total:0,
                 selectedRow:'',
                 operate:'',
                 formLabelWidth: '300px',
@@ -384,7 +384,18 @@
                     this.$post('/api/TutorSelectionSystem_war/admin/deleteTeacher',this.$Qs.stringify(this.formId)).then((res) =>{
                         console.log(res)
                         if(res.code==200){
-                            this.getList()
+                          //记录总页数,
+                          //此时已经实现删除操作，所以total的值需要减1，Math.ceil是向上取整，保证始终大于等于1
+                          const totalPage = Math.ceil((this.total - 1) / this.pagesize)
+
+                          //记录当前页码
+                          //记住删除最后一条数据时当前码是最后一页
+                          const currentpage = this.currentpage > totalPage ? totalPage : this.currentpage
+
+                          //实现跳转
+                          this.currentpage = currentpage < 1 ? 1 : currentpage
+                          // 重新渲染
+                          this.getList()
                         }else {
                             alert(res.msg)
                         }
@@ -444,11 +455,13 @@
             },
             //分页代码
             handleCurrentChange(val){
-                console.log('单击页码',val)
+                // console.log('单击页码',val)
                 this.currentpage = val
+              this.getList()
             },
             handleSizeChange(val){
                 this.pagesize = val
+              this.getList()
             },
             //批量删除
             handleBa(handleList){
@@ -482,7 +495,17 @@
                         }, { indices: false })).then((res)=>{
                                 console.log(res)
                             if (res.code==200){
-                                this.getList()
+                              const totalPage = Math.ceil((this.total - 1) / this.pagesize)
+
+                              //记录当前页码
+                              //记住删除最后一条数据时当前码是最后一页
+                              const currentpage = this.currentpage > totalPage ? totalPage : this.currentpage
+
+                              //实现跳转
+                              this.currentpage = currentpage < 1 ? 1 : currentpage
+                              // 重新渲染
+                              this.getList()
+
                             }else {
                                 alert(res.msg)
                             }

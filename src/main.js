@@ -4,10 +4,7 @@ import router from './router'
 import store from './store'
 import Qs from 'qs'
 Vue.prototype.$Qs = Qs
-
 Vue.config.productionTip = false
-
-
 //引入element-ui
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -19,6 +16,9 @@ import {post} from "./request/http";
 
 Vue.prototype.$get = get
 Vue.prototype.$post = post
+
+//引入moment时间插件
+// import Moment from "moment";
 
 // Vue.prototype.$axios = axios
 

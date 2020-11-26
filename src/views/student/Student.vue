@@ -115,7 +115,7 @@
        </el-dialog></div>
         <el-pagination
                 background
-                layout="total,prev, pager, next,sizes"
+                layout="total,prev, pager, next,sizes,jumper"
                 :page-size="pagesize"
                 :page-sizes="[5, 10, 20, 30]"
                 :total="tableData.length"
@@ -136,7 +136,10 @@
                 handleList:[],
                 currentpage:1,
                 pagesize:5,
-                dangkang:'学生添加',
+                 // 总页数
+                total: 0,
+
+              dangkang:'学生添加',
                 dialogFormVisible: false,
                 formLabelWidth: '300px',
                 tableData:[],
@@ -208,19 +211,25 @@
                 //隐藏dialog
 
             },
+
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                // console.log(`每页 ${val} 条`);
                 this.pagesize = val
+                //重新发送请求
+                this.getList()
             },
+          //通过jumper改变当前页码
             handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+                // console.log(`当前页: ${val}`);
                 this.currentpage = val
+              //重新发送请求
+                this.getList()
             },
             handleEdit(index, row) {
                 console.log(index, row);
             },
             handleDelete(index, row) {
-                console.log(index, row);
+                // console.log(index, row);
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -231,9 +240,21 @@
                     let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
                     this.formId.id=this.tableData[newIndex].id
                     this.$post('/api/TutorSelectionSystem_war/admin/deleteStudent',this.$Qs.stringify(this.formId)).then((res) =>{
-                        console.log(res)
+                        // console.log(res)
                         if(res.code==200){
-                            this.getList()
+
+                          //记录总页数,
+                          //此时已经实现删除操作，所以total的值需要减1，Math.ceil是向上取整，保证始终大于等于1
+                          const totalPage = Math.ceil((this.total - 1) / this.pagesize)
+
+                          //记录当前页码
+                          //记住删除最后一条数据时当前码是最后一页
+                          const currentpage = this.currentpage > totalPage ? totalPage : this.currentpage
+
+                          //实现跳转
+                          this.currentpage = currentpage < 1 ? 1 : currentpage
+                          // 重新渲染
+                          this.getList()
                         }else {
                             alert(res.msg)
                         }
@@ -294,7 +315,16 @@
                         }, { indices: false })).then((res)=>{
                             console.log(res)
                             if (res.code==200){
-                                this.getList()
+                              const totalPage = Math.ceil((this.total - 1) / this.pagesize)
+
+                              //记录当前页码
+                              //记住删除最后一条数据时当前码是最后一页
+                              const currentpage = this.currentpage > totalPage ? totalPage : this.currentpage
+
+                              //实现跳转
+                              this.currentpage = currentpage < 1 ? 1 : currentpage
+                              // 重新渲染
+                              this.getList()
                             }else {
                                 alert(res.msg)
                             }
@@ -327,7 +357,7 @@
                 })
             }
 
-        }
+        },
     }
 </script>
 
