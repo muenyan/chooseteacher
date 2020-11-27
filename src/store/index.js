@@ -35,6 +35,8 @@ export default new Vuex.Store({
 
     }
   },
+
+
   //和mutations差不多都是放的方法，这是异步操作,这里可以放Ajax请求
   actions: {
 

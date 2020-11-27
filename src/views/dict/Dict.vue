@@ -37,7 +37,12 @@
                 <el-table-column
                         prop="selectgrade"
                         label="参与遴选活动的年级"
-                        width="200">
+                        width="160">
+                </el-table-column>
+                <el-table-column
+                        prop="status"
+                        label="状态"
+                        width="170">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -48,6 +53,15 @@
                                 size="mini"
                                 type="danger"
                                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                          <el-button
+                              @click="handday(scope.$index, scope.row)"
+                              size="mini"
+                              type="danger">详情</el-button>
+                        <el-button
+                                @click="handdays(scope.$index, scope.row)"
+                                size="mini"
+                                v-show="jiangzhi"
+                                type="danger">强制选择</el-button>
 
                     </template>
                 </el-table-column>
@@ -95,10 +109,14 @@
 </template>
 
 <script>
+    // import store from '@/store'
     export default {
         name: "Dict",
         data(){
             return{
+                kanglen:'',
+                jiangzhi:false,
+                eidtIndex:'',
                 dangkang:'添加活动',
                 dialogFormVisible: false,
                 formLabelWidth: '300px',
@@ -120,7 +138,7 @@
             this.getList()
         },
         methods:{
-            handleSave(){
+            handleSave(index, row){
                 //第一步： 通过原始的对象生成一个新的对象
                 /*第二步：
                   1）首先要判断本次是添加还是修改？
@@ -133,7 +151,6 @@
                     //把数据添加到表格中
                     this.dialogFormVisible =false
                     this.$post('/api/TutorSelectionSystem_war/admin/createPlan',this.$Qs.stringify(this.form)).then((res) =>{
-                        console.log(res)
                         if (res.code==200) {
                             this.getList()
                         }else {
@@ -145,10 +162,11 @@
                     //修改
                     //调用修改接口，发送thhp请求
                     //修改表格中的数据
-                    console.log('6666666666')
+
                     this.dialogFormVisible =false
-                    this.form.id=this.tableData.id
-                    this.$get('/api/TutorSelectionSystem_war/admin/updatePlan',this.$Qs.stringify(this.form)).then((res) =>{
+                    console.log(this.eidtIndex)
+                    this.form.id = this.eidtIndex
+                    this.$post('/api/TutorSelectionSystem_war/admin/updatePlan',this.$Qs.stringify(this.form)).then((res) =>{
                         console.log(res)
                         if (res.code==200){
                             this.getList()
@@ -185,8 +203,10 @@
                 let newRow = Object.assign( {},row)
                 console.log(newRow)
                 this.form = newRow
-                console.log(this.form.id)
-                this.eidtIndex = this.tableData.findIndex((t) =>t.id ==row.id)
+                let pid = row.id
+                console.log(pid)
+                this.eidtIndex = pid
+                // this.eidtIndex = this.tableData.findIndex((t) =>t.id ==row.id)
             },
             handleDelete(index, row) {
                 console.log(index, row);
@@ -230,11 +250,86 @@
             },
             handleBatchDelete(){},
             handleBatchAdd(){},
+            //强制选择
+            handdays(index ,row){
+                console.log(row.id)
+             this.$post('/api/TutorSelectionSystem_war/admin/forceSelect',this.$Qs.stringify({id:row.id})).then((res) =>{
+                 console.log(res)
+                 if (res.code == 200){
+                     this.getList()
+                     alert('强制选择成功')
+                 }else {
+                     alert('强制选择失败')
+                 }
+             })
+            },
+            handday(index, row){
+                // this.eidtIndex = this.tableData.findIndex((t) =>t.id ==row.id)
+                // let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                // console.log(this.tableData[newIndex].id)
+                // this.form.id=this.tableData[newIndex].id
+                console.log(row.id)
+                     this.$post('/api/TutorSelectionSystem_war/admin/findPlanById',this.$Qs.stringify({id:row.id})).then((res) =>{
+                         if (this.code='200'){
+                             // this.$emit("pty",this.form.id);
+                             // store.commit('welcome',this.form.id)
+                             // this.$store.commit('dictId',res.id)
+                             // sessionStorage.setItem('currId',JSON.stringify(res.id))
+                             this.$router.push('/home/user/'+row.id)
+                         }else {
+                             alert(res.msg)
+                         }
+                     })
+            },
             getList(){
                 this.$post('/api/TutorSelectionSystem_war/admin/findPlan',this.$Qs.stringify()).then((res) =>{
                     console.log(res)
                     if (res.code==200){
                         this.tableData=res.list
+
+                        for (let i = 0; i <res.list.length ; i++) {
+                            if (res.list[i].status == '7'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "未完成"
+                                }
+                                this.jiangzhi = true
+                            } if (res.list[i].status == '8'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "已完成"
+                                }
+                                this.jiangzhi = false
+                            }if (res.list[i].status == '1'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "第一轮学生选择时间"
+                                }
+                                this.jiangzhi = true
+                            }if (res.list[i].status == '2'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "第一轮老师选择时间"
+                                }
+                                this.jiangzhi = true
+                            }if (res.list[i].status == '3'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "第二轮学生选择时间"
+                                }
+                                this.jiangzhi = true
+                            }if (res.list[i].status == '4'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "第二轮老师选择时间"
+                                }
+                                this.jiangzhi = true
+                            }if (res.list[i].status == '5'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "第三轮学生选择时间"
+                                }
+                                this.jiangzhi = true
+                            }if (res.list[i].status == '6'){
+                                for (let j = 0; j <this.tableData.length ; j++) {
+                                    this.tableData[i].status = "第三轮老师选择时间"
+                                }
+                                this.jiangzhi = true
+                            }
+                        }
                     }else {
                         alert(res.msg)
                     }

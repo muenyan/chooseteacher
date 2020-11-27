@@ -31,6 +31,24 @@
                 </el-form>
             </div>
         </div>
+        <div>
+            <el-dialog title="批量添加信息" :visible.sync="outerVisible">
+                <el-dialog
+                        width="30%"
+                        title="内层 Dialog"
+                        :visible.sync="innerVisible"
+                        append-to-body>
+                </el-dialog>
+                <span>请选择文件夹</span>
+                <from>
+                    <input type="file" name="fileInput" value="打开文件夹" @change="getFile($event)" >
+                </from>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="outerVisible = false">取 消</el-button>
+                    <el-button @click="outer" type="danger">确定</el-button>
+                </div>
+            </el-dialog>
+        </div>
         <div class="tbl-wrapper">
             <el-table
                     :data="tableData.slice((currentpage-1)*pagesize,currentpage*pagesize)"
@@ -83,6 +101,12 @@
                                     type="danger"
                                     :disabled="pop"
                                     @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handlereset(scope.$index, scope.row)"
+                                    :disabled="pop"
+                            >重置密码</el-button>
                         </template>
                     </el-table-column>
             </el-table>
@@ -132,6 +156,8 @@
         name: "Student",
         data(){
             return{
+                innerVisible: false,
+                outerVisible: false,
                 pop:false,
                 handleList:[],
                 currentpage:1,
@@ -172,6 +198,35 @@
             this.getList()
         },
         methods:{
+            getFile(event){
+                this.file = event.target.files[0];
+                console.log(this.file);
+            },
+
+            outer(event) {
+                this.outerVisible = false
+                event.preventDefault();
+                let formData = new FormData();
+                formData.append('fileInput', this.file);
+                let config = {
+                    // headers: {
+                    //   'Content-Type': 'multipart/form-data'
+                    // }
+                }
+                this.$post('api/TutorSelectionSystem_war/admin/insertStudents', formData, config).then((res) => {
+                    if (res.code == 200){
+                        //导入图片
+                        // this.$store.commit('setuser', res.user)
+                        // sessionStorage.setItem('curruser', JSON.stringify(res.user))
+                        this.$message(
+                            {
+                                type:"success",
+                                message:'导入成功'
+                            }
+                        )
+                    }
+                })
+            },
             handleSave(){
                 //第一步： 通过原始的对象生成一个新的对象
                 /*第二步：
@@ -198,6 +253,18 @@
                     //调用修改接口，发送thhp请求
                     //修改表格中的数据
                         this.dialogFormVisible =false
+                    this.dialogFormVisible=false
+                    console.log(this.form)
+                    this.$post('/api/TutorSelectionSystem_war/admin/editStudent',this.$Qs.stringify(this.form)).then((res) =>{
+                        console.log(res)
+                        if (res.code==200){
+                            //刷新数据
+                            this.getList()
+                        }
+                        else {
+                            alert(res.msg)
+                        }
+                    })
 
                 }
                 //清空form
@@ -227,6 +294,20 @@
             },
             handleEdit(index, row) {
                 console.log(index, row);
+                this.thn=true
+                //1.弹出dialog
+                this.dialogFormVisible = true
+                //清空form
+
+                for(let key in this.form){
+                    this.form[key] = ''
+                }
+
+                this.dangkang = '学生信息修改' //不能掉了他因为掉了会变成添加
+                let newRow = Object.assign( {},row)
+                this.form = newRow
+                console.log(this.form)
+                this.eidtIndex = this.tableData.findIndex((t) =>t.id ==row.id)
             },
             handleDelete(index, row) {
                 // console.log(index, row);
@@ -345,7 +426,39 @@
                 }
 
             },
-            handleBatchAdd(){},
+            handleBatchAdd(){
+                this.outerVisible = true
+            },
+            //重置密码
+            handlereset(index, row){
+                this.$confirm('确定重置密码？, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+
+                }).then(() => {
+                    // let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    let newIndex = this.tableData.findIndex((t)=> t.id==row.id)
+                    this.formId.id=this.tableData[newIndex].id
+                    this.$post('/api/TutorSelectionSystem_war/admin/resetStudent',this.$Qs.stringify(this.formId)).then((res) =>{
+                        console.log(res)
+                        if(res.code==200){
+                            this.$message({
+                                type: 'success',
+                                message: '重置密码成功!'
+                            });
+                        }else {
+                            alert(res.msg)
+                        }
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消重置密码'
+                    });
+                });
+            },
             getList(){
                 this.$post('/api/TutorSelectionSystem_war/admin/findStudent',this.$Qs.stringify()).then((res) =>{
                     console.log(res)

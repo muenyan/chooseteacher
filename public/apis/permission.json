@@ -8,30 +8,32 @@
         "name": "base",
         "icon": "el-icon-setting",
         "children": [
-          {"id": "15","title": "教师信息管理", "name": "teacher"},
-          {"id": "14","title": "学生信息管理", "name": "student"},
-          {"id": "18","title": "角色管理", "name": "role"},
-          {"id": "19","title": "字典管理", "name": "dict"},
-          {"id": "11","title": "网站用户", "name": "user"}
+          {"id": "15", "title": "教师管理", "name": "teacher","icons": "el-icon-star-off"},
+          {"id": "14", "title": "学生管理", "name": "student","icons": "el-icon-question"},
+          {"id": "18", "title": "首页", "name": "role","icons": "el-icon-s-goods"},
+          {"id": "19", "title": "创建活动", "name": "dict","icons": "el-icon-upload"},
+          {"id": "11", "title": "活动详情", "name": "user","icons": "el-icon-close"},
+          {"id": "20", "title": "查询教师", "name": "queryteachers","icons": "el-icon-close"}
+
         ]
       },
       {
         "id": "30",
         "title": "个人中心",
-        "name": "personal",
         "icon": "el-icon-user",
+        "name": "personal",
         "children": [
           {"id": "15", "title": "个人资料", "name": "info"},
-          {"id": "14", "title": "修改密码", "name": "pwd"}
+          {"id": "14", "title": "密码修改", "name": "pwd"}
         ]
       }
     ],
     "2": [
       {
-        "id": "3",
-        "title": "选择学生",
-        "name": "choosestudent"
-      },
+      "id": "3",
+      "title": "选择学生",
+      "name": "choosestudent"
+    },
       {
         "id": "6",
         "title": "我的学生",
@@ -43,7 +45,7 @@
         "name": "personal",
         "children": [
           {"id": "15", "title": "个人资料", "name": "info"},
-          {"id": "14", "title": "修改密码", "name": "pwd"}
+          {"id": "14", "title": "密码修改", "name": "pwd"}
         ]
       }
     ],
@@ -64,9 +66,11 @@
         "name": "personal",
         "children": [
           {"id": "15", "title": "个人资料", "name": "info"},
-          {"id": "14", "title": "修改密码", "name": "pwd"}
+          {"id": "14", "title": "密码修改", "name": "pwd"}
         ]
       }
     ]
+
   }
+
 }

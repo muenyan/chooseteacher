@@ -27,8 +27,7 @@
 
 
             <div class="tbl-wrapper">
-<!--                :data="tableData.slice((currentpage-1)*pagesize,currentpage*pagesize)"-->
-<!--                :data="tables.slice((currentpage-1)*pagesize,currentpage*pagesize)"-->
+
             <el-table
                     border
                     style="width: 100%"
@@ -79,7 +78,7 @@
                 <el-table-column
                         prop="academicdegree"
                         label="学位"
-                        width="200"
+                        width="180"
                 >
                 </el-table-column>
                 <el-table-column
@@ -117,10 +116,11 @@
                 </el-dialog>
                 <span>请选择文件夹</span>
                 <from>
-                    <input type="file" value="打开文件夹">
+                    <input type="file" value="打开文件夹" @change="getFile($event)" name="fileInput">
                 </from>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="outerVisible = false">取 消</el-button>
+                    <el-button @click="outer" type="danger">确定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -200,6 +200,7 @@
             }
 
             return {
+                file: '',
                 thn:false,
                 outerVisible: false,
                 innerVisible: false,
@@ -268,6 +269,35 @@
             this.getList()
         },
         methods:{
+            getFile(event){
+                this.file = event.target.files[0];
+                console.log(this.file);
+            },
+
+            outer(event) {
+                this. outerVisible=false,
+                event.preventDefault();
+                let formData = new FormData();
+                formData.append('fileInput', this.file);
+                let config = {
+                    // headers: {
+                    //   'Content-Type': 'multipart/form-data'
+                    // }
+                }
+
+                this.$post('api/TutorSelectionSystem_war/admin/insertTeachers', formData, config).then((res) => {
+                    if (res.code == 200){
+                        // this.$store.commit('setuser', res.user)
+                        // sessionStorage.setItem('curruser', JSON.stringify(res.user))
+                        this.$message(
+                            {
+                                type:"success",
+                                message:'导入成功'
+                            }
+                        )
+                    }
+                })
+            },
             handleSave(index,row){
                 //第一步： 通过原始的对象生成一个新的对象
                /*第二步：

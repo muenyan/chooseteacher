@@ -122,8 +122,6 @@ export function post (url, params) {
             .catch(err => {
                 reject(err.data)
             })
-
     })
-
 }
 

@@ -48,6 +48,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+
                         this.$post('/api/TutorSelectionSystem_war/user/login',this.$Qs.stringify(this.ruleForm)).then((res) => {
                             if (res.code=='505'){
 
